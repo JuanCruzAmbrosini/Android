@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Presentation Card</string>
+    <string name="logo_descriptor">Logo</string>
+    <string name="name">Juan Cruz Ambrosini</string>
+    <string name="title">Android Developer</string>
+    <string name="cellphone_number">+54 9 26223090</string>
+    <string name="social_account">\@JuanCruz.Ambrosini</string>
+    <string name="email">juancruz.ambrosini@gmail.com</string>
+    <string name="celphone_icon">Celphone number icon</string>
+    <string name="share_icon">Share Icon</string>
+    <string name="email_icon">Email Icon</string>
+    <string name="generic_info">Generic info</string>
+    <string name="generic_icon">Generic Icon</string>
+</resources>

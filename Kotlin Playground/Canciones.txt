@@ -1,0 +1,17 @@
+fun main() {
+    val cancion: song = song(
+        title = "Feel Good Inc.",
+        artist = "Gorillaz",
+        releaseYear = 2005,
+        plays = 2500
+        )
+    cancion.showSong()
+}
+
+class song (val title: String, val artist: String, val releaseYear: Int, var plays: Int){
+    var isPopular: Boolean = plays >= 1000
+    
+    fun showSong(){
+        println("$title, interpretada por $artist, se lanzó en $releaseYear y tiene $plays reproducciones")
+    }
+}

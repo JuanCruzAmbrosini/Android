@@ -1,0 +1,27 @@
+fun main() {
+    val amanda = Person("Amanda", 33, null, null)
+    val atiqah = Person("Atiqah", 28, "climb", amanda)
+    val bruce = Person("Bruce", 38, null, amanda)
+
+    amanda.showProfile()
+    println()
+    atiqah.showProfile()
+    println()
+    bruce.showProfile()
+}
+
+class Person(val name: String, val age: Int, val hobby: String?, val referrer: Person?) {
+    fun showProfile() {
+        val hobbyMessage = if(hobby != null)"Likes to $hobby." else "Doesn't have a hobby."
+        val referrerMessage = if (referrer != null){
+           if (referrer.hobby != null){
+               "Has a referrer named ${referrer.name}, who likes to ${referrer?.hobby}." ?: "Has a referrer named ${referrer.name}, who doesn't have a hobby."
+           } else {
+               "Has a referrer named ${referrer.name}, who doesn't have a hobby."
+           }
+        } else {
+            "Does not have a referrer."
+        }
+        println("Name: $name\nAge: $age\n$hobbyMessage $referrerMessage")
+	}
+}
