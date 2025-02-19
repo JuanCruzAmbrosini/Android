@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Art Gallery</string>
+    <string name="generic_author">Generic Author</string>
+    <string name="generic_title">Generic Title</string>
+    <string name="generic_description">Generic Description</string>
+    <string name="generic_year">0000</string>
+    <string name="sample_text">Sample text</string>
+    <string name="previous_button">Previous</string>
+    <string name="next_button">Next</string>
+    <string name="title_1">"Creación de Adán"</string>
+    <string name="title_2">"El Guernica"</string>
+    <string name="title_3">"El jardín de las Delicias"</string>
+    <string name="title_4">"La gran ola de Kanagawa"</string>
+    <string name="description_text_1">Creación de Adán</string>
+    <string name="description_text_2">El Guernica</string>
+    <string name="description_text_3">El Jardín de las Delicias</string>
+    <string name="description_text_4">La Gran Ola de Kanagawa</string>
+    <string name="author_1">Miguel Ángel Bounarroti,</string>
+    <string name="author_2">Pablo Picasso,</string>
+    <string name="author_3">El Bosco,</string>
+    <string name="author_4">Katsushika Hokusai,</string>
+    <string name="year_1">1508–1512</string>
+    <string name="year_2">1937</string>
+    <string name="year_3">1500–1505</string>
+    <string name="year_4">1830–1833</string>
+</resources>
