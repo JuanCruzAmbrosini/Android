@@ -1,6 +1,7 @@
 package com.example.artgallery
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,12 +10,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
@@ -29,11 +32,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.VerticalAlignmentLine
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -68,7 +74,7 @@ class MainActivity : ComponentActivity() {
 fun ArtGalleryApp(modifier: Modifier = Modifier) {
 
 
-    var actualView by remember { mutableIntStateOf(1) }
+    var actualView by rememberSaveable { mutableIntStateOf(1) }
 
     val fields = R.drawable::class.java.fields
     val numberOfPaintings = fields.size
@@ -134,45 +140,93 @@ fun ArtGalleryLayout(onClickFunctionPrevious: () -> Unit,
                      image: Painter?,
                      modifier: Modifier = Modifier) {
 
-    Column (
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
+    val isLandscape = isLandscape()
+    val isTablet = isTablet()
 
-        Spacer(Modifier.weight(0.5f))
+    if (!isLandscape) {
+        Column (
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
 
-        Surface (
+            Spacer(Modifier.weight(0.5f))
 
-            shadowElevation = 10.dp,
-            modifier = Modifier
-                .padding(start = 20.dp, end = 20.dp)
-                .border(width = 2.dp, color = Color(0xFF545496))
-                .weight(0.7f)
-            ) {
-            if (image != null) {
-                Image(
-                    painter = image,
-                    contentDescription = descriptionText,
-                    modifier = Modifier.padding(32.dp)
+            Surface (
+
+                shadowElevation = 10.dp,
+                modifier = Modifier
+                    .padding(start = 20.dp, end = 20.dp)
+                    .border(width = 2.dp, color = Color(0xFF545496))
+                    .sizeIn(maxWidth = 600.dp)
+                ) {
+                if (image != null) {
+                    Image(
+                        painter = image,
+                        contentDescription = descriptionText,
+                        modifier = Modifier
+                            .padding(32.dp),
+                    )
+                }
+            }
+
+            Spacer(Modifier.weight(0.5f))
+
+            Box (
+
+                modifier = Modifier
+                    .weight(1f),
+                contentAlignment = Alignment.BottomCenter
+
+            ){
+                TextColumn(
+                    title = title,
+                    author = author,
+                    year = year,
+                    onClickFunctionPrevious = onClickFunctionPrevious,
+                    onClickFunctionNext = onClickFunctionNext,
+                    descriptionText = descriptionText,
+                    image = image,
+                    modifier = Modifier
+                        .sizeIn(maxWidth = 600.dp, maxHeight = 200.dp)
                 )
             }
+
+            ButtonRow(
+                onClickFunctionPrevious,
+                onClickFunctionNext,
+                modifier = Modifier
+                    .weight(1f)
+                    .sizeIn(maxWidth = 600.dp)
+            )
         }
 
-        Spacer(Modifier.weight(0.5f))
+    } else {
 
-        TextColumn(
-            title = title,
-            author = author,
-            year = year,
-            onClickFunctionPrevious = onClickFunctionPrevious,
-            onClickFunctionNext = onClickFunctionNext,
-            descriptionText = descriptionText,
-            image = image,
+        Box (
+
             modifier = Modifier
-                .weight(0.45f)
-                .width(500.dp)
-        )
+                .fillMaxSize()
+                .padding(30.dp),
+            contentAlignment = Alignment.Center
+
+        ){
+            Surface(
+
+                shadowElevation = 10.dp,
+                modifier = Modifier
+                    .border(width = 2.dp, color = Color(0xFF545496))
+            ) {
+                if (image != null) {
+                    Image(
+                        painter = image,
+                        contentDescription = descriptionText,
+                        modifier = Modifier
+                            .padding(32.dp),
+                    )
+                }
+            }
+        }
 
     }
 }
@@ -199,7 +253,9 @@ fun TextColumn (
         horizontalAlignment = Alignment.Start
     ){
         Column (
-            modifier = Modifier.fillMaxWidth().wrapContentSize()
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentSize()
         ) {
             Text(
                 text = title,
@@ -214,7 +270,7 @@ fun TextColumn (
                 text = buildAnnotatedString {
 
                     withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                        append(title)
+                        append(author)
                     }
                     append(" $year")
                 },
@@ -225,8 +281,6 @@ fun TextColumn (
         }
     }
 
-    ButtonRow(onClickFunctionPrevious, onClickFunctionNext)
-
 }
 
 @Composable
@@ -235,10 +289,11 @@ fun ButtonRow(onClickFunctionPrevious: () -> Unit ,
               modifier: Modifier = Modifier){
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(top = 24.dp, start = 24.dp, end = 24.dp, bottom = 48.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.Bottom
     ) {
 
         NextAndPreviousButton(buttonText = stringResource(R.string.previous_button),
@@ -288,7 +343,22 @@ fun getDynamicImageResource(imageNumber: Int, context: Context): Painter? {
     return if (resId != 0) painterResource(resId) else null
 }
 
-@Preview(showBackground = true)
+@Composable
+fun isLandscape(): Boolean {
+    val configuration = LocalConfiguration.current
+    val orientation = configuration.orientation
+    return orientation == Configuration.ORIENTATION_LANDSCAPE
+}
+
+@Composable
+fun isTablet(): Boolean {
+    val configuration = LocalConfiguration.current
+    val screenWidthDp = configuration.screenWidthDp
+    return screenWidthDp >= 900
+}
+
+@Preview(showBackground = true, showSystemUi = true,
+    device = "spec:width=411dp,height=891dp,dpi=420,isRound=false,chinSize=0dp,orientation=landscape")
 @Composable
 fun ArtGalleryPreview() {
     ArtGalleryTheme {
