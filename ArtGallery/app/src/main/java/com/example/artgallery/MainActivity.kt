@@ -141,7 +141,6 @@ fun ArtGalleryLayout(onClickFunctionPrevious: () -> Unit,
                      modifier: Modifier = Modifier) {
 
     val isLandscape = isLandscape()
-    val isTablet = isTablet()
 
     if (!isLandscape) {
         Column (
